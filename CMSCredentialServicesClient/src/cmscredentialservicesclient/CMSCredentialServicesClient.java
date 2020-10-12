@@ -7,6 +7,8 @@ package cmscredentialservicesclient;
 
 import com.alodiga.cms.json.card.AssignPhysicalCardResponse;
 import com.alodiga.cms.json.card.AssignVirtualCardResponse;
+import com.alodiga.cms.credential.service.utils.EncriptedRsa;
+import static com.alodiga.cms.credential.service.utils.EncriptedRsa.encrypt;
 import com.alodiga.cms.json.card.Constants;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +21,7 @@ import java.net.MalformedURLException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.codec.binary.Base64;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,38 +32,45 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author moise
+ * @author Moisés Graterol
  */
 public class CMSCredentialServicesClient {
 
    public static void main(String[] args) throws Exception {
-
         CMSCredentialServicesClient cardCredential = new CMSCredentialServicesClient();
         //cardCredential.assignVirtualCard("484", "CC", "0205C000000003", "20201005", "19680204", "SMITH+%20944", "H", "Benito%20Juarez", "03230", "525585258744", "NANCY.RAMELLA@CREDENCIAL.COM.MX", "F", "RAMELLA", "NANCY", "VACS691110UY9", "0002", "N", "95000,00", "Cerrito%20740", "H", "Benito%20Juárez", "03230", "10", "IVJVG1GEJeY%2B8sthmXXWo50vwEC%2B6MsK/plOBEtjZoRXLhvg8atTGL6PdlSnS59PEiWmb2/MGIqgdetPUzydTjErk25adtoTnRGLajn2iYjuc9rPVrsFXJNAxcQEF9BUv4YrD4FY%2BHdUlBjWorDDMuH5Jtsoazg0kVLZ6BaawXA=");
-        cardCredential.assignPhysicalCard("484", "5255852587440055", "525812584475", "Cerrito%20740", "H", "Benito%20Ju%C3%A1rez", "03230", "10", "S", "NANCY.RAMELLA@CREDENCIAL.COM.MX", "eYIryr64lLE%2BClVzaF3SfwpZRT5CYtPKylFHrMZASQg/EyTlFf0JUapkb0T7kBB7sqxiVwmY%2BlCeErg9vo7JAsGnzFPPbf6KKpzLb5uLZgjBuCUkAc6N8BNn/wXFa4g5KVX/KI90ghuk0RErJw/K23tNh2KSE0svUOdEm0elYCM=");
+        cardCredential.assignVirtualCard("484", "CC", "0205C000000003", "20201005", "19680204", "SMITH+%20944", "H", "Benito%20Juarez", "03230", "525585258744", "NANCY.RAMELLA@CREDENCIAL.COM.MX", "F", "RAMELLA", "NANCY", "VACS691110UY9", "0002", "N", "95000,00", "Cerrito%20740", "H", "Benito%20Juárez", "03230", "10");
+        //cardCredential.assignPhysicalCard("484", "5255852587440055", "525812584475", "Cerrito%20740", "H", "Benito%20Ju%C3%A1rez", "03230", "10", "S", "NANCY.RAMELLA@CREDENCIAL.COM.MX", "eYIryr64lLE%2BClVzaF3SfwpZRT5CYtPKylFHrMZASQg/EyTlFf0JUapkb0T7kBB7sqxiVwmY%2BlCeErg9vo7JAsGnzFPPbf6KKpzLb5uLZgjBuCUkAc6N8BNn/wXFa4g5KVX/KI90ghuk0RErJw/K23tNh2KSE0svUOdEm0elYCM=");
     }
-
-    public AssignVirtualCardResponse assignVirtualCard(String Ptr, String Tdc, String Ndc, String Fal, String Fnc, String Dct, String Dbt, String Dlt, String Cpn, String Ntc, String Mce, String Cst, String Aps, String Nbs, String Cuii, String Afff, String Mgt, String Icel, String Dcte, String Dpte, String Dlte, String Cpne, String Cple, String Penc) throws MalformedURLException, IOException, Exception {
-
+  
+   public AssignVirtualCardResponse assignVirtualCard(String Ptr, String Tdc, String Ndc, String Fal, 
+            String Fnc, String Dct, String Dbt, String Dlt, String Cpn, String Ntc, String Mce, 
+            String Cst, String Aps, String Nbs, String Cuii, String Afff, String Mgt, String Icel, 
+            String Dcte, String Dpte, String Dlte, String Cpne, String Cple) throws MalformedURLException, IOException, Exception {
+       
         HttpURLConnection connection = null;
         InputStream is = null;
-        String response = null;
-        String formattedSOAPResponse = "";
         String responseString = "";
         String outputString = "";
+        String Penc = "";
+        
         try {
-            // set up URL connection
+            //Se establece la conexión con la URL de Credencial Argentina
             java.net.URL url = new java.net.URL("https://master.credencial.com.ar/cgi-bin/nwwcgitst/PRUWEB/CWWS005B");
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            // write out form parameters
-            //String postParamaters = "&OPS=RegAlw& COD=758& PTR=484& TDC=CC& NDC=0205C000000003& FAL=20201005& FNC=19680204& DCT=SMITH+%20944& DBT=H& DLT=Benito%20Juarez& CPN=03230& NTC=525585258744& MCE=NANCY.RAMELLA@CREDENCIAL.COM.MX& CST=F& APS=RAMELLA& NBS=NANCY& CUI=VACS691110UY9& PRO=Q758& AFF=0002& MGT=N& ICEL=95000,00& DCTE=Cerrito%20740& DPTE=H& DLTE=Benito%20Juárez& CPNE=03230& CPLE=10& PENC=IVJVG1GEJeY%2B8sthmXXWo50vwEC%2B6MsK/plOBEtjZoRXLhvg8atTGL6PdlSnS59PEiWmb2/MGIqgdetPUzydTjErk25adtoTnRGLajn2iYjuc9rPVrsFXJNAxcQEF9BUv4YrD4FY%2BHdUlBjWorDDMuH5Jtsoazg0kVLZ6BaawXA=";
-            //System.out.println(postParamaters);
+            connection.setConnectTimeout(Constants.CONNECTION_TIMEOUT);
+            
+            //Encriptar la clave para conectarse al WebService de Credencial
+            String encryptedPassword = Base64.encodeBase64String(encrypt(Constants.PASSWORD_CREDENCIAL_WEB_SERVICES_TEST,Constants.PUBLIC_KEY_TEST));
+            encryptedPassword = encryptedPassword.replace("+", "%2B");
+            Penc = encryptedPassword;
+            
+            //Se estructura la cadena con la información de los parámetros
             StringBuilder postParam = new StringBuilder();
-            postParam.append("OPS");
+            postParam.append("OPS"); //Es el tipo de operación. Para este servicio corresponde "RegAlw"
             postParam.append("=");
             postParam.append(Constants.OPS);
             postParam.append("&");
@@ -194,14 +204,15 @@ public class CMSCredentialServicesClient {
             postParam.append("=");
             postParam.append(Penc);
             
-
+            //Se envían los parámetros a la solicitud HTTP
             String paramPost = postParam.toString();
             System.out.println("paramPost " + paramPost);
             connection.setFixedLengthStreamingMode(paramPost.getBytes().length);
             PrintWriter out = new PrintWriter(connection.getOutputStream());
             out.print(paramPost);
             out.close();
-            //Get Response  
+            
+            //Obtener la respuesta del Servicio 
             try {
                 is = connection.getInputStream();
             } catch (IOException ioe) {
@@ -215,18 +226,17 @@ public class CMSCredentialServicesClient {
                     }
                 }
             }
+            
+            //Se guarda la respuesta del servicio en outputString
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            //StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            //String line;
             while ((responseString = rd.readLine()) != null) {
-//                response.append(line);
-//                response.append('\r');
-                //response = line;
                 outputString = outputString + responseString;
-                //System.out.println(outputString);
             }
+            
             System.out.println("out: " + outputString);
+            //Convierte la respuesta outputString en un Document (XML)
             Document doc = parseXmlFile(outputString);
+            //Se obtiene la información del XML (Respuesta del Servicio)
             NodeList nodesResponse = doc.getElementsByTagName("Response");
             Element elementResponse = (Element) nodesResponse.item(0);
             NodeList codigo = elementResponse.getElementsByTagName("Codigo");
@@ -298,6 +308,7 @@ public class CMSCredentialServicesClient {
             NodeList provent = elementRegAlta.getElementsByTagName("Provent");
             Element Provent = (Element) provent.item(0);
 
+            //Se guarda en AssignVirtualCardResponse la respuesta del servicio
             AssignVirtualCardResponse assignVirtualCardResponse = new AssignVirtualCardResponse();
             try {
                 assignVirtualCardResponse.setCodigo(getCharacterDataFromElement(Codigo));
@@ -332,7 +343,6 @@ public class CMSCredentialServicesClient {
                 assignVirtualCardResponse.setLocalent(getCharacterDataFromElement(Localent));
                 assignVirtualCardResponse.setCPosent(getCharacterDataFromElement(CPosent));
                 assignVirtualCardResponse.setPlodent(getCharacterDataFromElement(Plodent));
-                //test
                 assignVirtualCardResponse.setProvent(getCharacterDataFromElement(Provent));
 
             } catch (Exception e) {
@@ -359,24 +369,30 @@ public class CMSCredentialServicesClient {
         }
     }
 
-    public AssignPhysicalCardResponse assignPhysicalCard(String Ptr, String Alantt, String Alactt, String Dcte, String Dpte, String Dlte, String Cpne, String Cple, String Mgt, String Mce, String Penc) throws MalformedURLException, IOException, Exception {
+    public AssignPhysicalCardResponse assignPhysicalCard(String Ptr, String Alantt, String Alactt, 
+            String Dcte, String Dpte, String Dlte, String Cpne, String Cple, String Mgt, 
+            String Mce) throws MalformedURLException, IOException, Exception {
 
         HttpURLConnection connection = null;
         InputStream is = null;
-        String response = null;
-        String formattedSOAPResponse = "";
         String responseString = "";
         String outputString = "";
+        String Penc = "";
+        
         try {
-            // set up URL connection
+            //Se establece la conexión con la URL
             java.net.URL url = new java.net.URL("https://master.credencial.com.ar/cgi-bin/nwwcgitst/PRUWEB/CWWS005B");
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            // write out form parameters
-            //String postParamaters = "OPS=RegMod& COD=758& PTR=484& ALANT=5255852587440055& ALACT=525812584475& DCTE=Cerrito%20740& DPTE=H& DLTE=Benito%20Ju%C3%A1rez& CPNE=03230& CPLE=10& MGT=S& MCE=NANCY.RAMELLA@CREDENCIAL.COM.MX& PENC=eYIryr64lLE%2BClVzaF3SfwpZRT5CYtPKylFHrMZASQg/EyTlFf0JUapkb0T7kBB7sqxiVwmY%2BlCeErg9vo7JAsGnzFPPbf6KKpzLb5uLZgjBuCUkAc6N8BNn/wXFa4g5KVX/KI90ghuk0RErJw/K23tNh2KSE0svUOdEm0elYCM=";
-            //System.out.println(postParamaters);
+            
+            //Encriptar la clave para conectarse al WebService de Credencial
+            String encryptedPassword = Base64.encodeBase64String(encrypt(Constants.PASSWORD_CREDENCIAL_WEB_SERVICES_TEST,Constants.PUBLIC_KEY_TEST));
+            encryptedPassword = encryptedPassword.replace("+", "%2B");
+            Penc = encryptedPassword;
+            
+            //Se estructura la cadena con la información de los parámetros
             StringBuilder sb = new StringBuilder();
             sb.append("OPS");
             sb.append("=");
@@ -442,12 +458,13 @@ public class CMSCredentialServicesClient {
             sb.append("=");
             sb.append(Penc);
 
-            String post = sb.toString();
-            //System.out.println(sb); 
+            //Se envían los parámetros a la solicitud HTTP
+            String post = sb.toString(); 
             connection.setFixedLengthStreamingMode(post.getBytes().length);
             PrintWriter out = new PrintWriter(connection.getOutputStream());
             out.print(post);
             out.close();
+            
             //Get Response  
             try {
                 is = connection.getInputStream();
@@ -462,10 +479,13 @@ public class CMSCredentialServicesClient {
                     }
                 }
             }
+            
+            //Comentario
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
             while ((responseString = rd.readLine()) != null) {
                 outputString = outputString + responseString;
             }
+            
             //System.out.println("out: " + outputString);
             Document doc = parseXmlFile(outputString);
             NodeList nodesResponse = doc.getElementsByTagName("Response");

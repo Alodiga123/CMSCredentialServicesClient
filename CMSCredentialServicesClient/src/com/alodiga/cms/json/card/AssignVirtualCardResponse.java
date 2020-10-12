@@ -347,10 +347,5 @@ public class AssignVirtualCardResponse {
     public void setProvent(String Provent) {
         this.Provent = Provent;
     }
-
-   
-    
-    
-
     
 }
