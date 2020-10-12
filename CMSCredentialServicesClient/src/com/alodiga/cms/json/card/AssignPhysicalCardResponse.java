@@ -188,9 +188,5 @@ public class AssignPhysicalCardResponse {
     public void setPanc(String Panc) {
         this.Panc = Panc;
     }
-
-    
-    
-
-    
+ 
 }
