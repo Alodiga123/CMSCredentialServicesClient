@@ -70,137 +70,137 @@ public class CMSCredentialServicesClient {
             
             //Se estructura la cadena con la información de los parámetros
             StringBuilder postParam = new StringBuilder();
-            postParam.append("OPS"); //Es el tipo de operación. Para este servicio corresponde "RegAlw"
+            postParam.append("OPS"); //Es el tipo de operación. Para este servicio corresponde "RegAlw" (Longitud máxima = 6)
             postParam.append("=");
             postParam.append(Constants.OPS);
             postParam.append("&");
 
-            postParam.append("COD");
+            postParam.append("COD"); //Es el valor de la identidad Empresarial. En este caso corresponde "758" (Longitud máxima = 3)
             postParam.append("=");
             postParam.append(Constants.COD);
             postParam.append("&");
 
-            postParam.append("PTR");
+            postParam.append("PTR"); //Es donde se debe informar el código de pais ISO 3166-1 numérico de tres posiciones (Longitud máxima = 3)
             postParam.append("=");
             postParam.append(Ptr);
             postParam.append("&");
 
-            postParam.append("TDC");
+            postParam.append("TDC"); //Tipo de documento de identidad (Verificar el documento guia con las tablas SPC) ejp CC = "CEDULA DE CIUDADANIA" (Longitud máxima = 3)
             postParam.append("=");
             postParam.append(Tdc);
             postParam.append("&");
 
-            postParam.append("NDC");
+            postParam.append("NDC"); //Es el valor del numero de documento de identidad (Longitud máxima = 30)
             postParam.append("=");
             postParam.append(Ndc);
             postParam.append("&");
 
-            postParam.append("FAL");
+            postParam.append("FAL"); //Es donde se debe informar la Fecha de Alta (Longitud máxima = 8)
             postParam.append("=");
             postParam.append(Fal);
             postParam.append("&");
 
-            postParam.append("FNC");
+            postParam.append("FNC");// Aqui es la fecha de nacimiento del solicitante (Longitud máxima = 8)
             postParam.append("=");
             postParam.append(Fnc);
             postParam.append("&");
 
-            postParam.append("DCT");
+            postParam.append("DCT");//Dirección de calle y numero de calle (Juntos) (Longitud máxima = 30)
             postParam.append("=");
             postParam.append(Dct);
             postParam.append("&");
 
-            postParam.append("DBT");
+            postParam.append("DBT");//Es el valor de código de provincia(Los codigos de referencia se debe verificar en el docmento de guia) (Longitud máxima = 1)
             postParam.append("=");
             postParam.append(Dbt);
             postParam.append("&");
 
-            postParam.append("DLT");
+            postParam.append("DLT");//Es el valor de la descripción de la localidad, por ejemplo para provincia H (Ciudad de Mexico) puede ser 'Azcapotzalco', 'Benito Juárez', etc. (Longitud máxima = 25)
             postParam.append("=");
             postParam.append(Dlt);
             postParam.append("&");
 
-            postParam.append("CPN");
+            postParam.append("CPN");//Es el valor del código postal de la ciudad (Longitud máxima = 8)
             postParam.append("=");
             postParam.append(Cpn);
             postParam.append("&");
 
-            postParam.append("NTC");
+            postParam.append("NTC");//Es el valor del número del teléfono móvil (Longitud máxima = 20)
             postParam.append("=");
             postParam.append(Ntc);
             postParam.append("&");
 
-            postParam.append("MCE");
+            postParam.append("MCE");//Es el valor del correo electrónico (Longitud máxima = 60)
             postParam.append("=");
             postParam.append(Mce);
             postParam.append("&");
 
-            postParam.append("CST");
+            postParam.append("CST");//Es el valor del sexo de la persona (Longitud máxima = 1)
             postParam.append("=");
             postParam.append(Cst);
             postParam.append("&");
 
-            postParam.append("APS");
+            postParam.append("APS");//Es el valor del apellido de la persona (Longitud máxima = 20)
             postParam.append("=");
             postParam.append(Aps);
             postParam.append("&");
 
-            postParam.append("NBS");
+            postParam.append("NBS");//Es el valor del nombre de la persona (Longitud máxima = 20)
             postParam.append("=");
             postParam.append(Nbs);
             postParam.append("&");
 
-            postParam.append("CUI");
+            postParam.append("CUI");//Es el valor que corresponde al RIF en el caso de Venezuela y al RFC en caso de Mexico (Longitud máxima = 15)
             postParam.append("=");
             postParam.append(Cuii);
             postParam.append("&");
-
-            postParam.append("PRO");
+ 
+            postParam.append("PRO");//Código de Producto. Información proporcionada por Credencial (Longitud máxima = 4)
             postParam.append("=");
             postParam.append(Constants.PRO);
             postParam.append("&");
 
-            postParam.append("AFF");
+            postParam.append("AFF");//Codigo de Afinación. Información proporcionada por Credencial (Longitud máxima = 4)
             postParam.append("=");
             postParam.append(Afff);
             postParam.append("&");
 
-            postParam.append("MGT");
+            postParam.append("MGT");//Es el valor de la grabación de tarjeta. Los posibles valores son 'S'(Se da de alta una tarjeta fisica) y 'N'(Se da de alta una tarjeta virtual)
             postParam.append("=");
             postParam.append(Mgt);
             postParam.append("&");
 
-            postParam.append("ICEL");
+            postParam.append("ICEL");//Es el valor para el importe de carga anual y/o límite
             postParam.append("=");
             postParam.append(Icel);
             postParam.append("&");
 
-            postParam.append("DCTE");
+            postParam.append("DCTE");//Es el valor de la dirección (calle y nro) de entrega de la tarjeta (Longitud máxima = 30)
             postParam.append("=");
             postParam.append(Dcte);
             postParam.append("&");
 
-            postParam.append("DPTE");
+            postParam.append("DPTE");//Codigo de Provincia(Verificar el documento guia con los códigos de provincias) Ejemplo: P = MORELOS (Longitud máxima = 1)
             postParam.append("=");
             postParam.append(Dpte);
             postParam.append("&");
 
-            postParam.append("DLTE");
+            postParam.append("DLTE");//Es el valor de la localidad de entrega (Longitud máxima = 25)
             postParam.append("=");
             postParam.append(Dlte);
             postParam.append("&");
 
-            postParam.append("CPNE");
+            postParam.append("CPNE");//Es el valor del código postal de la dirección de entrega (Longitud máxima = 8)
             postParam.append("=");
             postParam.append(Cpne);
             postParam.append("&");
 
-            postParam.append("CPLE");
+            postParam.append("CPLE");//Es valor del piso/local/oficina/departamento de entrega (Longitud máxima = 10)
             postParam.append("=");
             postParam.append(Cple);
             postParam.append("&");
 
-            postParam.append("PENC");
+            postParam.append("PENC");//Password encriptado otorgado al cliente por Credencial Processing (Longitud máxima = 200)
             postParam.append("=");
             postParam.append(Penc);
             
@@ -394,67 +394,67 @@ public class CMSCredentialServicesClient {
             
             //Se estructura la cadena con la información de los parámetros
             StringBuilder sb = new StringBuilder();
-            sb.append("OPS");
+            sb.append("OPS");//Es el tipo de operación. Para este servicio corresponde "RegMod" (Longitud máxima = 6)
             sb.append("=");
             sb.append(Constants.OPS_ASSIGNPHYSICALCARD);
             sb.append("&");
 
-            sb.append("COD");
+            sb.append("COD");//Es el valor de la identidad Empresarial. En este caso corresponde "758" (Longitud máxima = 3)
             sb.append("=");
             sb.append(Constants.COD);
             sb.append("&");
 
-            sb.append("PTR");
+            sb.append("PTR");//Es donde se debe informar el código de pais ISO 3166-1 numérico de tres posiciones (Longitud máxima = 3)
             sb.append("=");
             sb.append(Ptr);
             sb.append("&");
 
-            sb.append("ALANT");
+            sb.append("ALANT");//Es este campo se envía el alias devuelto en el servicio anterior el cual representa el sinónimo del nro. de tarjeta.
             sb.append("=");
             sb.append(Alantt);
             sb.append("&");
 
-            sb.append("ALACT");
+            sb.append("ALACT");//En el caso de querer modificar el nro.de celular informado, se deberá informarlo en este campo, en la respuesta del servicio, en este campo se retornará el nuevo alias.
             sb.append("=");
             sb.append(Alactt);
             sb.append("&");
-
-            sb.append("DCTE");
+                               //Proporcionar solo si MGT = S
+            sb.append("DCTE");//Es el valor de la dirección (calle y nro) de entrega de la tarjeta (Longitud máxima = 30)
             sb.append("=");
             sb.append(Dcte);
             sb.append("&");
 
-            sb.append("DPTE");
+            sb.append("DPTE");//Codigo de Provincia(Verificar el documento guia con los códigos de provincias) Ejemplo: P = MORELOS (Longitud máxima = 1)
             sb.append("=");
             sb.append(Dpte);
             sb.append("&");
-
-            sb.append("DLTE");
+                               //Proporcionar solo si MGT = S
+            sb.append("DLTE");//Es el valor de la localidad de entrega (Longitud máxima = 25) 
             sb.append("=");
             sb.append(Dlte);
             sb.append("&");
-
-            sb.append("CPNE");
+                               //Proporcionar solo si MGT = S
+            sb.append("CPNE");//Es el valor del código postal de la dirección de entrega (Longitud máxima = 8)
             sb.append("=");
             sb.append(Cpne);
             sb.append("&");
-
-            sb.append("CPLE");
+                               //Proporcionar solo si MGT = S
+            sb.append("CPLE");//En este campo se informa el PLOD de la dirección de entrega de la tarjeta física, el PLOD es piso/local/oficina/departamento, ejemplo: 'PISO 8 DTO A' (Longitud máxima = 10)
             sb.append("=");
             sb.append(Cple);
             sb.append("&");
 
-            sb.append("MGT");
+            sb.append("MGT");//Es el valor de la grabación de tarjeta. Los posibles valores son 'S'(Se da de alta una tarjeta fisica) y 'N'(Se da de alta una tarjeta virtual) (Longitud máxima = 1)
             sb.append("=");
             sb.append(Mgt);
             sb.append("&");
 
-            sb.append("MCE");
+            sb.append("MCE");//Es el valor del correo electrónico (Longitud máxima = 60)
             sb.append("=");
             sb.append(Mce);
             sb.append("&");
 
-            sb.append("PENC");
+            sb.append("PENC");//Es el valor del password encriptado, el password sin encriptar se proporcionara por credencial (Longitud máxima = 200)
             sb.append("=");
             sb.append(Penc);
 
