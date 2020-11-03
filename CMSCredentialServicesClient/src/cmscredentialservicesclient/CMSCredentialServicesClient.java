@@ -465,7 +465,7 @@ public class CMSCredentialServicesClient {
             out.print(post);
             out.close();
             
-            //Get Response  
+            //Obtener la respuesta del Servicio   
             try {
                 is = connection.getInputStream();
             } catch (IOException ioe) {
@@ -480,14 +480,16 @@ public class CMSCredentialServicesClient {
                 }
             }
             
-            //Comentario
+            //Se guarda la respuesta del servicio en outputString
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
             while ((responseString = rd.readLine()) != null) {
                 outputString = outputString + responseString;
             }
             
-            //System.out.println("out: " + outputString);
+            System.out.println("out: " + outputString);
+            //Convierte la respuesta outputString en un Document (XML)
             Document doc = parseXmlFile(outputString);
+            //Se obtiene la información del XML (Respuesta del Servicio)
             NodeList nodesResponse = doc.getElementsByTagName("Response");
             Element elementResponse = (Element) nodesResponse.item(0);
             NodeList codigo = elementResponse.getElementsByTagName("Codigo");
@@ -527,6 +529,7 @@ public class CMSCredentialServicesClient {
             NodeList panc = elementRegAlta.getElementsByTagName("Panc");
             Element Panc = (Element) panc.item(0);
 
+            //Se guarda en AssignPhysicalCardResponse la respuesta del servicio
             AssignPhysicalCardResponse assignPhysicalCardResponse = new AssignPhysicalCardResponse();
             try {
                 assignPhysicalCardResponse.setCodigo(getCharacterDataFromElement(Codigo));
